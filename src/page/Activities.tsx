@@ -1,60 +1,91 @@
-import { PrimaryButton, Stack, TextField } from "@fluentui/react";
+import {
+  DefaultButton,
+  PrimaryButton,
+  Stack,
+  TextField,
+} from "@fluentui/react";
 import TextColor from "../components/TextColor";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IData } from "../interfaces/Configuration";
-import { useConfig } from "../context/Configuration";
+import { useActivities } from "../context/Activities";
 
 const Activities = () => {
-  const { config } = useConfig();
+  const { data, setData } = useActivities();
 
-  const [rowData, setRowData] = useState<IData>({ ...config });
+  const [rowData, setRowData] = useState<IData>({});
+
   const [countClient, setCountClient] = useState(1);
   const [countActivity, setCountActivity] = useState(1);
-  const [dateStart, setDateStart] = useState(moment().format("HH:mm:ss"));
+  const [dateStart, setDateStart] = useState("");
+
+  const isMayor = (number: number) => (number > 9 ? number + "" : `0${number}`);
 
   const Duration = () => {
-    let dateEnd = moment().format("HH:mm:ss");
+    let dateEnd = moment().format("Y-M-D HH:mm:ss");
 
-    const start = desfragmentHours(dateStart);
-    const end = desfragmentHours(dateEnd);
+    let second = moment(dateEnd).diff(dateStart, "second");
+    let minute = moment(dateEnd).diff(dateStart, "minute");
+    let hour = moment(dateEnd).diff(dateStart, "hour");
 
-    const [hour, minutes, seconds] = [
-      end.hours - start.hours,
-      end.minutes - start.minutes,
-      end.seconds - start.seconds,
-    ];
+    let duration = `${isMayor(hour)}:${isMayor(minute)}:${isMayor(second)}`;
 
-    setRowData({
+    let objectData = {
       ...rowData,
-      duration: `${isMayor(hour)}:${isMayor(minutes)}:${isMayor(seconds)}`,
-      dateEnd,
-      dateStart,
-      nActivity: countActivity + "",
-      nCliente: countClient + "",
-    });
-    setDateStart(moment().format("HH:mm:ss"));
+      duration,
+      dateStart: dateStart.split(" ")[1],
+      dateEnd: dateEnd.split(" ")[1],
+      categoryActivity: rowData.codeActivity?.substr(0, 1),
+      nActivity: countActivity,
+      nCliente: countClient,
+    };
+
+    setData(objectData);
   };
 
   const nextActivity = () => {
     Duration();
     setCountActivity((state) => state + 1);
-    console.log(rowData);
+  };
+
+  const nextClient = () => {
+    Duration();
+    setCountActivity(1);
+    setCountClient((state) => state + 1);
   };
 
   const onChange = (key: string, value?: string) => {
     setRowData({ ...rowData, [key]: value });
   };
 
+  const Clear = () => {
+    setRowData({});
+  };
+
   const onGetErrorMessage = (value: string) => {
     return value.length > 1 ? "" : "Este campo es obligatorio";
   };
 
+  useEffect(() => {
+    if (data) {
+      let activity = data[data.length - 1].nActivity;
+      let client = data[data.length - 1].nCliente;
+
+      setCountActivity(activity ? (activity > 1 ? activity + 1 : 1) : 1);
+      setCountClient(client ? client : 1);
+      setDateStart(moment().format("Y/M/D HH:mm:ss"));
+    }
+  }, [data]);
+
   return (
     <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: "90%" } }}>
+      <Stack horizontal horizontalAlign="space-between">
+        <DefaultButton disabled onClick={Clear} text="Limpiar" />
+        <DefaultButton disabled text="Mostrar" />
+      </Stack>
       <TextColor>Actividad</TextColor>
       <TextField
-        defaultValue={countClient + ""}
+        value={countClient + ""}
         label="N°Cliente"
         required
         underlined
@@ -69,7 +100,7 @@ const Activities = () => {
       />
       <TextField
         label="Hora Inicio"
-        value={dateStart}
+        value={dateStart.split(" ")[1]}
         required
         underlined
         onChange={(_, value) => onChange("dateStart", value)}
@@ -79,7 +110,6 @@ const Activities = () => {
         label="Producto"
         required
         underlined
-        defaultValue={rowData.product}
         onChange={(_, value) => onChange("product", value)}
       />
       <TextField
@@ -93,38 +123,12 @@ const Activities = () => {
         underlined
         multiline
         autoAdjustHeight
-        defaultValue={rowData.commentary}
         onChange={(_, value) => onChange("commentary", value)}
       />
-      <TextField
-        label="Hora Final"
-        defaultValue={rowData.dateEnd}
-        onChange={(_, value) => onChange("dateEnd", value)}
-        underlined
-      />
-      <TextField
-        label="Duraccion"
-        required
-        underlined
-        defaultValue={rowData.duration}
-        onChange={(_, value) => onChange("duration", value)}
-      />
       <PrimaryButton onClick={nextActivity} text="Siguiente Actividad" />
-      <PrimaryButton text="Siguiente Cliente" />
+      <PrimaryButton onClick={nextClient} text="Siguiente Cliente" />
     </Stack>
   );
 };
 
 export default Activities;
-
-function desfragmentHours(time: string) {
-  return {
-    hours: parseInt(time.substr(0, 2)),
-    minutes: parseInt(time.substr(3, 2)),
-    seconds: parseInt(time.substr(6, 2)),
-  };
-}
-
-function isMayor(number: number) {
-  return number > 9 ? `${number}` : `0${number}`;
-}

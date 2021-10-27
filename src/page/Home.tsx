@@ -1,5 +1,5 @@
 import { PrimaryButton, Stack, TextField } from "@fluentui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Iconfiguration } from "../interfaces/Configuration";
 import TextColor from "../components/TextColor";
 import { useConfig } from "../context/Configuration";
@@ -23,6 +23,12 @@ const Home = () => {
   const onChange = (key: string, value?: string) => {
     setConfiguration({ ...configuration, [key]: value });
   };
+
+  useEffect(() => {
+    if(config?.nameController){
+      setConfiguration({...config})
+    }
+  }, [config])
 
   const onClick = () => {
     if (!configuration.sede) return;
