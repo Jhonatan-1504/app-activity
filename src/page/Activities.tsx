@@ -17,16 +17,18 @@ const Activities = () => {
 
   const [countClient, setCountClient] = useState(1);
   const [countActivity, setCountActivity] = useState(1);
-  const [dateStart, setDateStart] = useState("");
+  const [dateStart, setDateStart] = useState(moment().format("Y/M/D HH:mm:ss"));
 
   const isMayor = (number: number) => (number > 9 ? number + "" : `0${number}`);
 
   const Duration = () => {
     let dateEnd = moment().format("Y-M-D HH:mm:ss");
 
-    let second = moment(dateEnd).diff(dateStart, "second");
-    let minute = moment(dateEnd).diff(dateStart, "minute");
-    let hour = moment(dateEnd).diff(dateStart, "hour");
+    let formtDateEnd = moment(dateEnd);
+
+    let second = formtDateEnd.diff(dateStart, "second");
+    let minute = formtDateEnd.diff(dateStart, "minute");
+    let hour = formtDateEnd.diff(dateStart, "hour");
 
     let duration = `${isMayor(hour)}:${isMayor(minute)}:${isMayor(second)}`;
 
@@ -67,12 +69,14 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    if (data) {
-      let activity = data[data.length - 1].nActivity;
-      let client = data[data.length - 1].nCliente;
+    let activity = data[data.length - 1].nActivity;
+    let client = data[data.length - 1].nCliente;
+    setCountActivity(activity ? (activity > 1 ? activity + 1 : 1) : 1);
+    setCountClient(client ? client : 1);
+  }, []);
 
-      setCountActivity(activity ? (activity > 1 ? activity + 1 : 1) : 1);
-      setCountClient(client ? client : 1);
+  useEffect(() => {
+    if (data) {
       setDateStart(moment().format("Y/M/D HH:mm:ss"));
     }
   }, [data]);
