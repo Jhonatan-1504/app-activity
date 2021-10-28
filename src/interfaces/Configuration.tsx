@@ -28,4 +28,5 @@ export interface IData extends Iconfiguration {
 export interface IContextData {
   data: IData[];
   setData?: any;
+  Clean?: () => void;
 }

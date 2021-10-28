@@ -5,7 +5,7 @@ import Activities from "../page/Activities";
 
 import Home from "../page/Home";
 import Layout from "../page/Layout";
-import List from "../page/List";
+import List from "../page/List/List";
 
 const ActivitiesRouter = () => {
   return (

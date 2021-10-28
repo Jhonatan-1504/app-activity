@@ -1,13 +1,13 @@
 import { createContext, FC, useContext, useState } from "react";
 import { IContextData, IData } from "../interfaces/Configuration";
 
-const contextActivities = createContext<IContextData>({data:[]});
+const contextActivities = createContext<IContextData>({ data: [] });
 
 export const useActivities = () => useContext(contextActivities);
 
 export const ActivitiesProvider: FC = ({ children }) => {
   let day = new Date();
-  let saveName = `${day.getDate()}.${day.getMonth() + 1}`
+  let saveName = `${day.getDate()}.${day.getMonth() + 1}`;
 
   let datAll = localStorage.getItem(saveName);
 
@@ -15,13 +15,18 @@ export const ActivitiesProvider: FC = ({ children }) => {
 
   const [data, setData] = useState<IData[]>(getData);
 
-  const setSaveData = (item:IData)=>{
+  const setSaveData = (item: IData) => {
     setData([...data, item]);
-    localStorage.setItem(saveName,JSON.stringify(data))
+    localStorage.setItem(saveName, JSON.stringify([...data, item]));
+  };
+
+  const Clean = () =>{
+    localStorage.removeItem(saveName)
+    setData([])
   }
 
   return (
-    <contextActivities.Provider value={{ data, setData:setSaveData }}>
+    <contextActivities.Provider value={{ data, setData: setSaveData,Clean }}>
       {children}
     </contextActivities.Provider>
   );

@@ -64,16 +64,14 @@ const Activities = () => {
     setRowData({});
   };
 
-  const onGetErrorMessage = (value: string) => {
-    return value.length > 1 ? "" : "Este campo es obligatorio";
-  };
-
   useEffect(() => {
-    let activity = data[data.length - 1].nActivity;
-    let client = data[data.length - 1].nCliente;
-    setCountActivity(activity ? (activity > 1 ? activity + 1 : 1) : 1);
-    setCountClient(client ? client : 1);
-  }, []);
+    if(data.length){
+      let activity = data[data.length - 1].nActivity;
+      let client = data[data.length - 1].nCliente;
+      setCountActivity(activity ? (activity > 1 ? activity + 1 : 1) : 1);
+      setCountClient(client ? client : 1);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (data) {
@@ -92,6 +90,8 @@ const Activities = () => {
         value={countClient + ""}
         label="N°Cliente"
         required
+        id="client_id"
+        readOnly
         underlined
         onChange={(_, value) => onChange("nCliente", value)}
       />
@@ -99,26 +99,23 @@ const Activities = () => {
         label="N°Actividad"
         value={countActivity + ""}
         required
+        readOnly
         underlined
+        id="activity_id"
         onChange={(_, value) => onChange("nActivity", value)}
       />
-      <TextField
-        label="Hora Inicio"
-        value={dateStart.split(" ")[1]}
-        required
-        underlined
-        onChange={(_, value) => onChange("dateStart", value)}
-        onGetErrorMessage={onGetErrorMessage}
-      />
+
       <TextField
         label="Producto"
         required
+        id="product_id"
         underlined
         onChange={(_, value) => onChange("product", value)}
       />
       <TextField
         label="Codigo"
         onChange={(_, value) => onChange("codeActivity", value)}
+        id="code_id"
         required
         underlined
       />
@@ -126,6 +123,7 @@ const Activities = () => {
         label="Observacion:"
         underlined
         multiline
+        id="commentary_id"
         autoAdjustHeight
         onChange={(_, value) => onChange("commentary", value)}
       />
