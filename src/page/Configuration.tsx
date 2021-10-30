@@ -7,14 +7,14 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 
 const initialState: Iconfiguration = {
-  date: moment().format("L"),
+  date: moment().format("D/M/Y"),
   sede: "San Isidro",
   marketStall: "Ejecutivo de Negocios BEX DIGITAL",
 };
 
 const calendarIcons = { iconName: "Calendar" };
 
-const Home = () => {
+const Configuration = () => {
   const { setConfig, config } = useConfig();
   const [configuration, setConfiguration] =
     useState<Iconfiguration>(initialState);
@@ -25,10 +25,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if(config?.nameController){
-      setConfiguration({...config})
+    if (config?.nameController) {
+      setConfiguration({ ...config });
     }
-  }, [config])
+  }, [config]);
 
   const onClick = () => {
     if (!configuration.sede) return;
@@ -37,7 +37,7 @@ const Home = () => {
     if (!configuration.nameExecutive) return;
     if (!configuration.nameController) return;
     setConfig(configuration);
-    navegation.push("/Acitivity");
+    navegation.push("/");
   };
 
   const onGetErrorMessage = (value: string) => {
@@ -56,7 +56,7 @@ const Home = () => {
         onGetErrorMessage={onGetErrorMessage}
       />
       <TextField
-        defaultValue={config?.date ? config.date : configuration.date}
+        defaultValue={configuration.date}
         label="Fecha"
         name="date"
         required
@@ -95,4 +95,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Configuration;

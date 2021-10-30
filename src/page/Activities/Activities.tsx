@@ -4,20 +4,21 @@ import {
   Stack,
   TextField,
 } from "@fluentui/react";
-import TextColor from "../components/TextColor";
-import moment from "moment";
 import { useEffect, useState } from "react";
-import { IData } from "../interfaces/Configuration";
-import { useActivities } from "../context/Activities";
+import { IData } from "../../interfaces/Configuration";
+import { useActivities } from "../../context/Activities";
+import TextColor from "../../components/TextColor";
+import moment from "moment";
+import Message from "../List/Message";
+import CommadDate from "./CommadDate";
 
 const Activities = () => {
-  const { data, setData } = useActivities();
+  const { data, setData, setTemp, temp, CleanTemp } = useActivities();
 
-  const [rowData, setRowData] = useState<IData>({});
+  const [rowData, setRowData] = useState<IData>(temp);
+  const [isCorrect, setIsCorrect] = useState(false);
 
-  const [countClient, setCountClient] = useState(1);
-  const [countActivity, setCountActivity] = useState(1);
-  const [dateStart, setDateStart] = useState(moment().format("Y/M/D HH:mm:ss"));
+  const [dateStart, setDateStart] = useState("");
 
   const isMayor = (number: number) => (number > 9 ? number + "" : `0${number}`);
 
@@ -38,97 +39,89 @@ const Activities = () => {
       dateStart: dateStart.split(" ")[1],
       dateEnd: dateEnd.split(" ")[1],
       categoryActivity: rowData.codeActivity?.substr(0, 1),
-      nActivity: countActivity,
-      nCliente: countClient,
     };
 
     setData(objectData);
   };
 
-  const nextActivity = () => {
+  const handleFinished = () => {
+    CleanTemp();
+    setIsCorrect(true);
     Duration();
-    setCountActivity((state) => state + 1);
+    setTimeout(() => setIsCorrect(false), 1000);
   };
 
-  const nextClient = () => {
-    Duration();
-    setCountActivity(1);
-    setCountClient((state) => state + 1);
+  const HandleWaiting = () => {
+    let objectTemporal = {
+      ...rowData,
+      dateStart,
+    };
+    setTemp(objectTemporal);
   };
+
+  const handleNewStartDate = () =>
+    setDateStart(moment().format("Y-M-D HH:mm:ss"));
 
   const onChange = (key: string, value?: string) => {
     setRowData({ ...rowData, [key]: value });
   };
 
-  const Clear = () => {
-    setRowData({});
-  };
-
   useEffect(() => {
-    if(data.length){
-      let activity = data[data.length - 1].nActivity;
-      let client = data[data.length - 1].nCliente;
-      setCountActivity(activity ? (activity > 1 ? activity + 1 : 1) : 1);
-      setCountClient(client ? client : 1);
+    if (temp.dateStart) {
+      setDateStart(temp.dateStart);
+      return;
     }
-  }, [data]);
-
-  useEffect(() => {
     if (data) {
       setDateStart(moment().format("Y/M/D HH:mm:ss"));
+      return;
     }
-  }, [data]);
+  }, [data, temp]);
 
   return (
     <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: "90%" } }}>
-      <Stack horizontal horizontalAlign="space-between">
-        <DefaultButton disabled onClick={Clear} text="Limpiar" />
-        <DefaultButton disabled text="Mostrar" />
-      </Stack>
+      <Stack>{isCorrect ? <Message /> : null}</Stack>
+      <CommadDate dateStart={dateStart} onClick={handleNewStartDate} />
       <TextColor>Actividad</TextColor>
       <TextField
-        value={countClient + ""}
+        defaultValue={rowData.nCliente}
         label="N°Cliente"
         required
-        id="client_id"
-        readOnly
         underlined
         onChange={(_, value) => onChange("nCliente", value)}
       />
       <TextField
         label="N°Actividad"
-        value={countActivity + ""}
+        defaultValue={rowData.nActivity}
         required
-        readOnly
         underlined
-        id="activity_id"
         onChange={(_, value) => onChange("nActivity", value)}
       />
-
       <TextField
         label="Producto"
         required
-        id="product_id"
         underlined
+        defaultValue={rowData.product}
         onChange={(_, value) => onChange("product", value)}
       />
       <TextField
         label="Codigo"
         onChange={(_, value) => onChange("codeActivity", value)}
-        id="code_id"
         required
+        defaultValue={rowData.codeActivity}
         underlined
       />
       <TextField
         label="Observacion:"
         underlined
         multiline
-        id="commentary_id"
         autoAdjustHeight
+        defaultValue={rowData.commentary}
         onChange={(_, value) => onChange("commentary", value)}
       />
-      <PrimaryButton onClick={nextActivity} text="Siguiente Actividad" />
-      <PrimaryButton onClick={nextClient} text="Siguiente Cliente" />
+      <Stack horizontal horizontalAlign="space-between">
+        <DefaultButton onClick={HandleWaiting} text="Espere" />
+        <PrimaryButton onClick={handleFinished} text="Terminar" />
+      </Stack>
     </Stack>
   );
 };

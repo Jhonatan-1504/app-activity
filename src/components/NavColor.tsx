@@ -7,20 +7,20 @@ const NavColor = () => {
     {
       links: [
         {
-          name: "Configuraciones",
-          url: "/",
-          key: "key3",
-          icon: "Settings",
-        },
-        {
           name: "Actividades",
-          url: "/Acitivity",
+          url: "/",
           icon: "EntitlementPolicy",
           key: "key4",
         },
         {
+          name: "Configuraciones",
+          url: "/config",
+          key: "key3",
+          icon: "Settings",
+        },
+        {
           name: "Mis Avances",
-          url: "/List",
+          url: "/list",
           icon: "CheckList",
           key: "key5",
         },
@@ -42,7 +42,7 @@ const NavColor = () => {
           tokens={{ childrenGap: 10, padding: 15 }}
           styles={{
             root: {
-              borderRadius:5,
+              borderRadius: 5,
               background:
                 history.location.pathname === nav?.url
                   ? Colors.palette.neutralLight
@@ -66,7 +66,7 @@ const NavColor = () => {
   };
 
   return (
-    <Stack verticalAlign="center" tokens={{padding:'10px 0'}}>
+    <Stack verticalAlign="center" tokens={{ padding: "10px 0" }}>
       {navLinkGroups[0].links.map((nav) => onRenderLink(nav))}
     </Stack>
   );
