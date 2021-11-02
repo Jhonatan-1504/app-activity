@@ -15,7 +15,7 @@ import CommadClient from "./CommadClient";
 import CommadActivity from "./CommadActivity";
 
 const Activities = () => {
-  const { data, setData, setTemp, temp, CleanTemp, nActivity, nCliente } =
+  const { setData, setTemp, temp, CleanTemp, nActivity, nCliente } =
     useActivities();
 
   const [rowData, setRowData] = useState<IData>(temp);
