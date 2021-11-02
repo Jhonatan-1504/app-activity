@@ -28,6 +28,9 @@ const Configuration = () => {
     if (config?.nameController) {
       setConfiguration({ ...config });
     }
+    if(config?.date){
+      setConfiguration({ ...config });
+    }
   }, [config]);
 
   const onClick = () => {

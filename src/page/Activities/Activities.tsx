@@ -4,7 +4,7 @@ import {
   Stack,
   TextField,
 } from "@fluentui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IData } from "../../interfaces/Configuration";
 import { useActivities } from "../../context/Activities";
 import TextColor from "../../components/TextColor";
@@ -21,7 +21,7 @@ const Activities = () => {
   const [rowData, setRowData] = useState<IData>(temp);
   const [isCorrect, setIsCorrect] = useState(false);
 
-  const [dateStart, setDateStart] = useState("");
+  const [dateStart, setDateStart] = useState(temp.dateStart?temp.dateStart:moment().format("Y/M/D HH:mm:ss"));
 
   const Duration = (dateEnd: string) => {
     const isMayor = (number: number) =>
@@ -50,6 +50,8 @@ const Activities = () => {
     };
 
     setData(objectData);
+
+    handleNewStartDate()
   };
 
   const handleFinished = () => {
@@ -76,17 +78,6 @@ const Activities = () => {
   const onChange = (key: string, value?: string) => {
     setRowData({ ...rowData, [key]: value });
   };
-
-  useEffect(() => {
-    if (temp.dateStart) {
-      setDateStart(temp.dateStart);
-      return;
-    }
-    if (data) {
-      setDateStart(moment().format("Y/M/D HH:mm:ss"));
-      return;
-    }
-  }, [data, temp]);
 
   return (
     <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: "90%" } }}>

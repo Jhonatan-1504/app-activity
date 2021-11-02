@@ -28,7 +28,7 @@ const List = () => {
         Fecha: config?.date,
         Puesto: config?.marketStall,
         "Nombre del ejecutivo": config?.nameExecutive,
-        Cliente: item.nCliente,
+        Cliente: item.nCliente===0?'':item.nCliente,
         "N°": item.nActivity,
         "Hora de Inicio": item.dateStart,
         Producto: item.product,
