@@ -11,31 +11,39 @@ import TextColor from "../../components/TextColor";
 import moment from "moment";
 import Message from "../List/Message";
 import CommadDate from "./CommadDate";
+import CommadClient from "./CommadClient";
+import CommadActivity from "./CommadActivity";
 
 const Activities = () => {
-  const { data, setData, setTemp, temp, CleanTemp } = useActivities();
+  const { data, setData, setTemp, temp, CleanTemp, nActivity, nCliente } =
+    useActivities();
 
   const [rowData, setRowData] = useState<IData>(temp);
   const [isCorrect, setIsCorrect] = useState(false);
 
   const [dateStart, setDateStart] = useState("");
 
-  const isMayor = (number: number) => (number > 9 ? number + "" : `0${number}`);
+  const Duration = (dateEnd: string) => {
+    const isMayor = (number: number) =>
+      number > 9 ? number + "" : `0${number}`;
 
-  const Duration = () => {
+    let formatDateEnd = moment(dateEnd);
+    let second = formatDateEnd.diff(dateStart, "second") % 60;
+    let minute = formatDateEnd.diff(dateStart, "minute") % 60;
+    let hour = formatDateEnd.diff(dateStart, "hour");
+
+    return `${isMayor(hour)}:${isMayor(minute)}:${isMayor(second)}`;
+  };
+
+  const SaveAll = () => {
     let dateEnd = moment().format("Y-M-D HH:mm:ss");
-
-    let formtDateEnd = moment(dateEnd);
-
-    let second = formtDateEnd.diff(dateStart, "second");
-    let minute = formtDateEnd.diff(dateStart, "minute");
-    let hour = formtDateEnd.diff(dateStart, "hour");
-
-    let duration = `${isMayor(hour)}:${isMayor(minute)}:${isMayor(second)}`;
+    let duration = Duration(dateEnd);
 
     let objectData = {
       ...rowData,
       duration,
+      nCliente,
+      nActivity,
       dateStart: dateStart.split(" ")[1],
       dateEnd: dateEnd.split(" ")[1],
       categoryActivity: rowData.codeActivity?.substr(0, 1),
@@ -47,20 +55,23 @@ const Activities = () => {
   const handleFinished = () => {
     CleanTemp();
     setIsCorrect(true);
-    Duration();
+    SaveAll();
     setTimeout(() => setIsCorrect(false), 1000);
   };
 
   const HandleWaiting = () => {
     let objectTemporal = {
       ...rowData,
+      nCliente,
+      nActivity,
       dateStart,
     };
     setTemp(objectTemporal);
   };
 
-  const handleNewStartDate = () =>
+  const handleNewStartDate = () => {
     setDateStart(moment().format("Y-M-D HH:mm:ss"));
+  };
 
   const onChange = (key: string, value?: string) => {
     setRowData({ ...rowData, [key]: value });
@@ -82,20 +93,8 @@ const Activities = () => {
       <Stack>{isCorrect ? <Message /> : null}</Stack>
       <CommadDate dateStart={dateStart} onClick={handleNewStartDate} />
       <TextColor>Actividad</TextColor>
-      <TextField
-        defaultValue={rowData.nCliente}
-        label="N°Cliente"
-        required
-        underlined
-        onChange={(_, value) => onChange("nCliente", value)}
-      />
-      <TextField
-        label="N°Actividad"
-        defaultValue={rowData.nActivity}
-        required
-        underlined
-        onChange={(_, value) => onChange("nActivity", value)}
-      />
+      <CommadClient />
+      <CommadActivity />
       <TextField
         label="Producto"
         required

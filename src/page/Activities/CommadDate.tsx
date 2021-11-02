@@ -21,7 +21,7 @@ const CommadDate: FC<ICommadDate> = ({ dateStart, dateEnd, onClick }) => {
       </Stack.Item>
       <Stack.Item aria-orientation="horizontal">
         <Text style={blockText} variant="mediumPlus">
-          FInal
+          Final
         </Text>
         <Text variant="xLarge">{dateEnd ? dateEnd.split(" ")[1] : ""}</Text>
       </Stack.Item>

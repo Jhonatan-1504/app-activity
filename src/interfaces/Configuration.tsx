@@ -14,8 +14,8 @@ export interface IContextConfiguration {
 }
 
 export interface IData extends Iconfiguration {
-  nCliente?: string;
-  nActivity?: string;
+  nCliente: number;
+  nActivity: number;
   dateStart?: string;
   product?: string;
   categoryActivity?: string;
@@ -29,7 +29,13 @@ export interface IContextData {
   data: IData[];
   setData?: any;
   temp: IData;
-  setTemp?: any;
+  setTemp?:any;
   CleanTemp?: any;
   Clean?: () => void;
+  getNextActivity:()=>number;
+  getNextClient:()=>number;
+  nActivity:number;
+  setNActivity?:any;
+  nCliente:number;
+  setNCliente?:any;
 }
