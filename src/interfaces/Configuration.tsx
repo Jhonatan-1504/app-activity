@@ -14,7 +14,7 @@ export interface IContextConfiguration {
 }
 
 export interface IData extends Iconfiguration {
-  nCliente: number;
+  nClient: number;
   nActivity: number;
   dateStart?: string;
   product?: string;
@@ -28,14 +28,21 @@ export interface IData extends Iconfiguration {
 export interface IContextData {
   data: IData[];
   setData?: any;
-  temp: IData;
-  setTemp?:any;
-  CleanTemp?: any;
-  Clean?: () => void;
-  getNextActivity:()=>number;
-  getNextClient:()=>number;
+  getLastObject: () => IData | null;
+  Clean?: any;
+}
+
+export interface IContextForm {
+  activity: IData;
+  setActivity?: any;
+  handleChange: (key: string, value?: string | number) => void;
+  handleSubmit:()=>void;
+  handleRecord:()=>void;
+  handleClean:()=>void;
+  dateStart:string;
+  nClient:number;
   nActivity:number;
-  setNActivity?:any;
-  nCliente:number;
-  setNCliente?:any;
+  setDateStart:any;
+  setNClient:any;
+  setNActivity:any;
 }

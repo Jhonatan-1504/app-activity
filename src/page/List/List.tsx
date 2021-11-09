@@ -28,7 +28,7 @@ const List = () => {
         Fecha: config?.date,
         Puesto: config?.marketStall,
         "Nombre del ejecutivo": config?.nameExecutive,
-        Cliente: item.nCliente===0?'':item.nCliente,
+        Cliente: item.nClient===0?'':item.nClient,
         "N°": item.nActivity,
         "Hora de Inicio": item.dateStart,
         Producto: item.product,
@@ -48,7 +48,7 @@ const List = () => {
   };
 
   return (
-    <Stack horizontalAlign="center">
+    <Stack tokens={{ childrenGap:5}} styles={{ root: { width: "90%" } }}>
       <Stack
         horizontal
         styles={{ root: { width: "100%" } }}
@@ -63,7 +63,6 @@ const List = () => {
         items={data}
         selectionMode={SelectionMode.none}
       />
-
       <Delete hideDialog={hideDialog} toggleHideDialog={toggleHideDialog} />
     </Stack>
   );

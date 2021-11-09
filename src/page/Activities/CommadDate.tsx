@@ -1,29 +1,28 @@
 import { DefaultButton, Stack, Text } from "@fluentui/react";
+import { useFormContext } from "../../context/FormActivity";
 import { FC } from "react";
+import moment from "moment";
 
-interface ICommadDate {
-  dateStart: string;
-  dateEnd?: string;
-  onClick?: () => void;
-}
-
-const CommadDate: FC<ICommadDate> = ({ dateStart, dateEnd, onClick }) => {
+const CommadDate: FC = () => {
   const blockText = { display: "block" };
+
+  const { setDateStart, dateStart } = useFormContext();
+
+  const handleRefresh = () => {
+    setDateStart(moment().format("Y/M/D HH:mm:ss"));
+  };
 
   return (
     <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
-      <DefaultButton onClick={onClick} iconProps={{ iconName: "Refresh" }} />
+      <DefaultButton
+        onClick={handleRefresh}
+        iconProps={{ iconName: "Refresh" }}
+      />
       <Stack.Item aria-orientation="horizontal">
         <Text style={blockText} variant="mediumPlus">
           Inicio
         </Text>
         <Text variant="xLarge"> {dateStart.split(" ")[1]}</Text>
-      </Stack.Item>
-      <Stack.Item aria-orientation="horizontal">
-        <Text style={blockText} variant="mediumPlus">
-          Final
-        </Text>
-        <Text variant="xLarge">{dateEnd ? dateEnd.split(" ")[1] : ""}</Text>
       </Stack.Item>
     </Stack>
   );

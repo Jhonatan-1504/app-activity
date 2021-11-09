@@ -1,15 +1,11 @@
-import { useActivities } from "../../context/Activities";
 import { DefaultButton, Label, SpinButton, Stack } from "@fluentui/react";
+import { useFormContext } from "../../context/FormActivity";
 
 const CommadActivity = () => {
-  const { getNextActivity, setNActivity,nActivity } = useActivities();
+  const { nActivity, setNActivity } = useFormContext();
 
   const handleNext = () => {
-    setNActivity(getNextActivity());
-  };
-
-  const handleChange = (value?: string) => {
-    setNActivity(value ? parseInt(value) : 1);
+    setNActivity((state: number) => state * 1 + 1);
   };
 
   return (
@@ -18,11 +14,11 @@ const CommadActivity = () => {
       <Stack horizontal tokens={{ childrenGap: 10 }}>
         <DefaultButton onClick={handleNext} text="Siguiente" />
         <SpinButton
-          value={nActivity ? nActivity + "" : ""}
           min={0}
           max={200}
           step={1}
-          onChange={(_, value) => handleChange(value)}
+          value={nActivity + ""}
+          onChange={(ev, val) => setNActivity(val ? parseInt(val) : 0)}
           incrementButtonAriaLabel="Increase value by 1"
           decrementButtonAriaLabel="Decrease value by 1"
         />

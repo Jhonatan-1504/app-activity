@@ -7,9 +7,6 @@ export const gridStyles: Partial<IDetailsListStyles> = {
       "& [role=grid]": {
         display: "flex",
         flexDirection: "column",
-        alignItems: "start",
-        height: "80vh",
-        width: "50vh",
       },
     },
   },

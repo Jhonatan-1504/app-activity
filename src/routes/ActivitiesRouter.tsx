@@ -6,6 +6,7 @@ import Activities from "../page/Activities/Activities";
 import ConfigurationComponent from "../page/Configuration";
 import List from "../page/List/List";
 import Layout from "../page/Layout";
+import { FormProvider } from "../context/FormActivity";
 
 const ActivitiesRouter = () => {
   return (
@@ -14,7 +15,9 @@ const ActivitiesRouter = () => {
         <BrowserRouter>
           <Switch>
             <Layout>
-              <Route path="/" exact component={Activities} />
+              <FormProvider>
+                <Route path="/" exact component={Activities} />
+              </FormProvider>
               <Route path="/config" exact component={ConfigurationComponent} />
               <Route path="/list" component={List} />
             </Layout>

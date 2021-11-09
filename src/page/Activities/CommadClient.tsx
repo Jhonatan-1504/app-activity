@@ -1,19 +1,30 @@
 import { DefaultButton, Label, SpinButton, Stack } from "@fluentui/react";
 import { useActivities } from "../../context/Activities";
+import { useFormContext } from "../../context/FormActivity";
 
 const CommadClient = () => {
-  const { getNextClient, nCliente, setNCliente } = useActivities();
-
-  const handleNext = () => {
-    setNCliente(getNextClient())
-  };
+  const { nClient, setNClient, setNActivity } = useFormContext();
+  const { getLastObject } = useActivities();
 
   const handleNull = () => {
-    setNCliente(0)
+    setNClient("");
   };
 
-  const handleChange = (value?: string) => {
-    setNCliente(value ? parseInt(value) : 1);
+  const handleNext = () => {
+    let obj = getLastObject();
+
+    if (obj?.nClient && obj.nClient * 1 + 1 !== nClient) {
+      setNActivity(1);
+    }
+
+    switch (obj) {
+      case null:
+        setNClient(1);
+        break;
+      case obj:
+        setNClient(obj?.nClient ? obj.nClient * 1 + 1 : 1);
+        break;
+    }
   };
 
   return (
@@ -22,15 +33,15 @@ const CommadClient = () => {
       <Stack horizontal tokens={{ childrenGap: 10 }}>
         <DefaultButton onClick={handleNext} text="Siguiente" />
         <SpinButton
-          value={nCliente ? nCliente + "" : ""}
           min={0}
           max={200}
           step={1}
-          onChange={(_, value) => handleChange(value)}
+          value={nClient + ""}
+          onChange={(ev, val) => setNClient(val ? parseInt(val) : "")}
           incrementButtonAriaLabel="Increase value by 1"
           decrementButtonAriaLabel="Decrease value by 1"
         />
-        <DefaultButton onClick={handleNull} text="Nulo" />
+        <DefaultButton text="Nulo" onClick={handleNull} />
       </Stack>
     </>
   );
