@@ -1,6 +1,7 @@
 import {
   DefaultButton,
   DetailsList,
+  DetailsListLayoutMode,
   SelectionMode,
   Stack,
 } from "@fluentui/react";
@@ -40,6 +41,7 @@ const List = () => {
         Controlador: config?.nameController,
       })
     );
+    console.log(data);    
     setAlldataToExport(all);
   }, [data, config]);
 
@@ -61,7 +63,11 @@ const List = () => {
         styles={gridStyles}
         columns={column}
         items={data}
+        compact={false}
         selectionMode={SelectionMode.none}
+        layoutMode={DetailsListLayoutMode.justified}
+        setKey="none"
+        isHeaderVisible={true}
       />
       <Delete hideDialog={hideDialog} toggleHideDialog={toggleHideDialog} />
     </Stack>

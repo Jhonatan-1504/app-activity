@@ -9,6 +9,7 @@ export const FormContext = createContext<IContextForm>({
   handleSubmit: () => {},
   handleRecord: () => {},
   handleClean: () => {},
+  isLoading: false,
   dateStart: "",
   nActivity: 1,
   nClient: 1,
@@ -29,6 +30,7 @@ export const FormProvider: FC = ({ children }) => {
 
   const [nClient, setNClient] = useState(temp.nClient ? temp.nClient : 1);
   const [nActivity, setNActivity] = useState(temp.nActivity ? temp.nActivity : 1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [dateStart, setDateStart] = useState(
     temp.dateStart ? temp.dateStart : moment().format("Y/M/D HH:mm:ss")
@@ -51,6 +53,8 @@ export const FormProvider: FC = ({ children }) => {
   };
 
   const handleSubmit = () => {
+    setIsLoading(true);
+
     let dateEnd = moment().format("Y/M/D HH:mm:ss");
     let duration = setDuration(dateEnd);
 
@@ -66,6 +70,10 @@ export const FormProvider: FC = ({ children }) => {
     setDateStart(moment().format("Y/M/D HH:mm:ss"));
     setNActivity((state: number) => state * 1 + 1);
     localStorage.removeItem("temp");
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000);
   };
 
   const handleRecord = () => {
@@ -96,6 +104,7 @@ export const FormProvider: FC = ({ children }) => {
         setNClient,
         setNActivity,
         setDateStart,
+        isLoading,
       }}
     >
       {children}

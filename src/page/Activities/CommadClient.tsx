@@ -13,10 +13,6 @@ const CommadClient = () => {
   const handleNext = () => {
     let obj = getLastObject();
 
-    if (obj?.nClient && obj.nClient * 1 + 1 !== nClient) {
-      setNActivity(1);
-    }
-
     switch (obj) {
       case null:
         setNClient(1);
@@ -25,6 +21,7 @@ const CommadClient = () => {
         setNClient(obj?.nClient ? obj.nClient * 1 + 1 : 1);
         break;
     }
+    setNActivity(1)
   };
 
   return (

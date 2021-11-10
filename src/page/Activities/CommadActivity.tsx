@@ -1,11 +1,20 @@
 import { DefaultButton, Label, SpinButton, Stack } from "@fluentui/react";
+import { useActivities } from "../../context/Activities";
 import { useFormContext } from "../../context/FormActivity";
 
 const CommadActivity = () => {
+  const { getLastObject } = useActivities();
   const { nActivity, setNActivity } = useFormContext();
 
   const handleNext = () => {
-    setNActivity((state: number) => state * 1 + 1);
+    let obj = getLastObject();
+    switch (obj) {
+      case null:
+        setNActivity(1);
+        break;
+      default:
+        setNActivity(obj.nActivity * 1 + 1)
+    }
   };
 
   return (

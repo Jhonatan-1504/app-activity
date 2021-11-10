@@ -36,13 +36,14 @@ export interface IContextForm {
   activity: IData;
   setActivity?: any;
   handleChange: (key: string, value?: string | number) => void;
-  handleSubmit:()=>void;
-  handleRecord:()=>void;
-  handleClean:()=>void;
-  dateStart:string;
-  nClient:number;
-  nActivity:number;
-  setDateStart:any;
-  setNClient:any;
-  setNActivity:any;
+  handleSubmit: () => void;
+  handleRecord: () => void;
+  handleClean: () => void;
+  dateStart: string;
+  nClient: number;
+  nActivity: number;
+  setDateStart: any;
+  setNClient: any;
+  setNActivity: any;
+  isLoading: boolean;
 }

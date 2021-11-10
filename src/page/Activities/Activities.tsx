@@ -8,22 +8,24 @@ import { useFormContext } from "../../context/FormActivity";
 import CommadActivity from "./CommadActivity";
 import CommadClient from "./CommadClient";
 import CommadDate from "./CommadDate";
+import SuccessAlert from "./SuccessAlert";
 
 const Activities = () => {
   const {
     activity,
+    isLoading,
     handleChange,
     handleRecord,
     handleSubmit,
-    handleClean
+    handleClean,
   } = useFormContext();
 
   return (
     <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: "90%" } }}>
+      {isLoading ? <SuccessAlert /> : null}
       <CommadDate />
       <CommadClient />
       <CommadActivity />
-      
       <TextField
         label="Producto"
         required
