@@ -5,6 +5,7 @@ import {
   TextField,
 } from "@fluentui/react";
 import { useFormContext } from "../../context/FormActivity";
+import ComboboxProduct from "./ComboboxProduct";
 import CommadActivity from "./CommadActivity";
 import CommadClient from "./CommadClient";
 import CommadDate from "./CommadDate";
@@ -26,12 +27,7 @@ const Activities = () => {
       <CommadDate />
       <CommadClient />
       <CommadActivity />
-      <TextField
-        label="Producto"
-        required
-        defaultValue={activity.product}
-        onChange={(_, val) => handleChange("product", val)}
-      />
+      <ComboboxProduct />
       <TextField
         label="Codigo"
         required

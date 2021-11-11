@@ -1,4 +1,5 @@
 import {
+  ConstrainMode,
   DefaultButton,
   DetailsList,
   DetailsListLayoutMode,
@@ -13,6 +14,7 @@ import { gridStyles } from "./Styles";
 import { column } from "./Columns";
 import { useBoolean } from "@fluentui/react-hooks";
 import Delete from "./Delete";
+import { IData } from "../../interfaces/Configuration";
 
 const List = () => {
   const { fileName, config } = useConfig();
@@ -34,7 +36,7 @@ const List = () => {
         "Hora de Inicio": item.dateStart,
         Producto: item.product,
         Actividad: item.categoryActivity,
-        "Detalle de Actividad": item.codeActivity,
+        "Código de Actividad": item.codeActivity,
         "Observacion / Comentario": item.commentary,
         "Hora Final": item.dateEnd,
         Duracion: item.duration,
@@ -47,6 +49,10 @@ const List = () => {
 
   const ExportExcel = () => {
     tsXLXS().exportAsExcelFile(alldataToExport).saveAsExcelFile(fileName);
+  };
+
+  const onItemInvoked = (item: IData): void => {
+    alert('Item invoked: ' + item.dateStart);
   };
 
   return (
@@ -63,11 +69,12 @@ const List = () => {
         styles={gridStyles}
         columns={column}
         items={data}
-        compact={false}
         selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified}
-        setKey="none"
-        isHeaderVisible={true}
+        layoutMode={DetailsListLayoutMode.fixedColumns}
+        constrainMode={ConstrainMode.unconstrained}
+        onItemInvoked={onItemInvoked}
+        selectionPreservedOnEmptyClick
+        setKey="set"
       />
       <Delete hideDialog={hideDialog} toggleHideDialog={toggleHideDialog} />
     </Stack>

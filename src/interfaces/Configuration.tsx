@@ -1,3 +1,5 @@
+import { IComboBoxOption } from "@fluentui/react";
+
 export interface Iconfiguration {
   sede?: string;
   date?: string;
@@ -17,7 +19,7 @@ export interface IData extends Iconfiguration {
   nClient: number;
   nActivity: number;
   dateStart?: string;
-  product?: string;
+  product?: IComboBoxOption|string;
   categoryActivity?: string;
   codeActivity?: string;
   commentary?: string;
@@ -42,8 +44,10 @@ export interface IContextForm {
   dateStart: string;
   nClient: number;
   nActivity: number;
+  product:IComboBoxOption;
   setDateStart: any;
   setNClient: any;
   setNActivity: any;
+  setProduct:any;
   isLoading: boolean;
 }

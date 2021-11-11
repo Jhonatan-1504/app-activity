@@ -1,3 +1,4 @@
+import { IComboBoxOption } from "@fluentui/react";
 import moment from "moment";
 import { createContext, FC, useContext, useState } from "react";
 import { IContextForm, IData } from "../interfaces/Configuration";
@@ -13,6 +14,8 @@ export const FormContext = createContext<IContextForm>({
   dateStart: "",
   nActivity: 1,
   nClient: 1,
+  product: { text: "", key: "" },
+  setProduct: null,
   setDateStart: null,
   setNClient: null,
   setNActivity: null,
@@ -26,12 +29,18 @@ export const FormProvider: FC = ({ children }) => {
   let temporalStorage = localStorage.getItem("temp");
   let temp: IData = temporalStorage ? JSON.parse(temporalStorage) : {};
 
-  const [activity, setActivity] = useState<IData>(temp);
-
-  const [nClient, setNClient] = useState(temp.nClient ? temp.nClient : 1);
-  const [nActivity, setNActivity] = useState(temp.nActivity ? temp.nActivity : 1);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [activity, setActivity] = useState<IData>(temp);
+  const [nClient, setNClient] = useState(temp.nClient ? temp.nClient : 1);
+  const [nActivity, setNActivity] = useState(
+    temp.nActivity ? temp.nActivity : 1
+  );
+  const [product, setProduct] = useState<IComboBoxOption>(
+    temp.product && typeof temp.product !== "string"
+      ? temp.product
+      : { key: "nulo", text: "No tiene" }
+  );
   const [dateStart, setDateStart] = useState(
     temp.dateStart ? temp.dateStart : moment().format("Y/M/D HH:mm:ss")
   );
@@ -63,16 +72,19 @@ export const FormProvider: FC = ({ children }) => {
       nClient,
       nActivity,
       duration,
+      product: product.text !== "No tiene" ? product.text : "",
+      categoryActivity: activity.codeActivity?.split("")[0],
       dateEnd: dateEnd.split(" ")[1],
       dateStart: dateStart.split(" ")[1],
     };
     setData(obj);
     setDateStart(moment().format("Y/M/D HH:mm:ss"));
     setNActivity((state: number) => state * 1 + 1);
+    setProduct({ key: "nulo", text: "No tiene" });
     localStorage.removeItem("temp");
 
     setTimeout(() => {
-      setIsLoading(false)
+      setIsLoading(false);
     }, 1000);
   };
 
@@ -82,6 +94,7 @@ export const FormProvider: FC = ({ children }) => {
       nClient,
       nActivity,
       dateStart,
+      product,
     };
     localStorage.setItem("temp", JSON.stringify(obj));
   };
@@ -105,6 +118,8 @@ export const FormProvider: FC = ({ children }) => {
         setNActivity,
         setDateStart,
         isLoading,
+        product,
+        setProduct,
       }}
     >
       {children}
