@@ -45,7 +45,6 @@ const ComboboxProduct = () => {
       required
       label="Producto"
       autoComplete="on"
-      allowFreeform={true}
       onChange={handleChange}
       options={INITIAL_OPTIONS}
     />

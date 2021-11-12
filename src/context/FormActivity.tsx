@@ -80,9 +80,7 @@ export const FormProvider: FC = ({ children }) => {
     setData(obj);
     setDateStart(moment().format("Y/M/D HH:mm:ss"));
     setNActivity((state: number) => state * 1 + 1);
-    setProduct({ key: "nulo", text: "No tiene" });
     localStorage.removeItem("temp");
-
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
