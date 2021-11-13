@@ -6,6 +6,7 @@ const contextActivities = createContext<IContextData>({
   getLastObject: () => {
     return { nActivity: 1, nClient: 1 };
   },
+  getCurrentClien:()=>null
 });
 
 export const useActivities = () => useContext(contextActivities);
@@ -33,6 +34,12 @@ export const ActivitiesProvider: FC = ({ children }) => {
     return null;
   };
 
+  const getCurrentClien = (nActivity:number)=>{
+    if(data.length) return data[data.length - 1 - nActivity];
+
+    return null
+  }
+
   const Clean = () => {
     setData([]);
     localStorage.removeItem(fileNameDB);
@@ -45,6 +52,7 @@ export const ActivitiesProvider: FC = ({ children }) => {
         setData: setSaveData,
         getLastObject,
         Clean,
+        getCurrentClien
       }}
     >
       {children}

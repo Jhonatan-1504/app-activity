@@ -5,8 +5,6 @@ import { IContextForm, IData } from "../interfaces/Configuration";
 import { useActivities } from "./Activities";
 
 export const FormContext = createContext<IContextForm>({
-  activity: { nActivity: 1, nClient: 1 },
-  handleChange: () => {},
   handleSubmit: () => {},
   handleRecord: () => {},
   handleClean: () => {},
@@ -14,11 +12,15 @@ export const FormContext = createContext<IContextForm>({
   dateStart: "",
   nActivity: 1,
   nClient: 1,
+  commentary: "",
+  codeActivity: "",
   product: { text: "", key: "" },
   setProduct: null,
   setDateStart: null,
   setNClient: null,
   setNActivity: null,
+  setCommentary: null,
+  setCodeActivity: null,
 });
 
 export const useFormContext = () => useContext(FormContext);
@@ -31,7 +33,6 @@ export const FormProvider: FC = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [activity, setActivity] = useState<IData>(temp);
   const [nClient, setNClient] = useState(temp.nClient ? temp.nClient : 1);
   const [nActivity, setNActivity] = useState(
     temp.nActivity ? temp.nActivity : 1
@@ -44,10 +45,12 @@ export const FormProvider: FC = ({ children }) => {
   const [dateStart, setDateStart] = useState(
     temp.dateStart ? temp.dateStart : moment().format("Y/M/D HH:mm:ss")
   );
-
-  const handleChange = (key: string, value?: string | number) => {
-    setActivity({ ...activity, [key]: value });
-  };
+  const [commentary, setCommentary] = useState(
+    temp.commentary ? temp.commentary : ""
+  );
+  const [codeActivity, setCodeActivity] = useState(
+    temp.codeActivity ? temp.codeActivity : ""
+  );
 
   const setDuration = (dateEnd: string) => {
     const isMayor = (number: number) =>
@@ -68,18 +71,22 @@ export const FormProvider: FC = ({ children }) => {
     let duration = setDuration(dateEnd);
 
     let obj: IData = {
-      ...activity,
       nClient,
       nActivity,
       duration,
+      codeActivity,
+      commentary,
       product: product.text !== "No tiene" ? product.text : "",
-      categoryActivity: activity.codeActivity?.split("")[0],
+      categoryActivity: codeActivity?.split("")[0],
       dateEnd: dateEnd.split(" ")[1],
       dateStart: dateStart.split(" ")[1],
     };
     setData(obj);
     setDateStart(moment().format("Y/M/D HH:mm:ss"));
     setNActivity((state: number) => state * 1 + 1);
+    setCodeActivity("");
+    setCommentary("");
+
     localStorage.removeItem("temp");
     setTimeout(() => {
       setIsLoading(false);
@@ -88,7 +95,8 @@ export const FormProvider: FC = ({ children }) => {
 
   const handleRecord = () => {
     let obj: IData = {
-      ...activity,
+      codeActivity,
+      commentary,
       nClient,
       nActivity,
       dateStart,
@@ -98,23 +106,27 @@ export const FormProvider: FC = ({ children }) => {
   };
 
   const handleClean = () => {
-    setActivity({ nClient: 1, nActivity: 1 });
+    setCodeActivity("");
+    setCommentary("");
+    setProduct({ key: "nulo", text: "No tiene" });
   };
 
   return (
     <FormContext.Provider
       value={{
-        activity,
-        handleChange,
         handleSubmit,
         handleRecord,
         handleClean,
         dateStart,
         nClient,
         nActivity,
+        commentary,
+        codeActivity,
         setNClient,
         setNActivity,
         setDateStart,
+        setCommentary,
+        setCodeActivity,
         isLoading,
         product,
         setProduct,

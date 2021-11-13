@@ -2,7 +2,7 @@ import { DefaultButton } from "@fluentui/react";
 import { useActivities } from "../../context/Activities";
 import { useConfig } from "../../context/Configuration";
 
-import { utils, WorkBook, write, ColInfo } from "xlsx-js-style";
+import { utils, WorkBook, write, ColInfo, CellStyle } from "xlsx-js-style";
 import * as FileSaver from "file-saver";
 import { useEffect, useState } from "react";
 import { IData } from "../../interfaces/Configuration";
@@ -10,6 +10,8 @@ import { IData } from "../../interfaces/Configuration";
 let fileType =
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 let fileExtension = ".xlsx";
+
+const BORDER_DARK: any = { style: "thin", color: { rgb: "000000" } };
 
 const ExcelExport = () => {
   const { data } = useActivities();
@@ -34,7 +36,7 @@ const ExcelExport = () => {
     { wch: 25 },
   ];
 
-  const stylesColumns = {
+  const stylesColumns: CellStyle = {
     fill: { patternType: "solid", fgColor: { rgb: "203764" } },
     font: { color: { rgb: "FFFFFF" } },
     alignment: {
@@ -42,10 +44,10 @@ const ExcelExport = () => {
       horizontal: "center",
     },
     border: {
-      bottom: {
-        style: "thin",
-        color: "FF000000",
-      },
+      bottom: BORDER_DARK,
+      left: BORDER_DARK,
+      right: BORDER_DARK,
+      top: BORDER_DARK,
     },
   };
 
@@ -93,6 +95,16 @@ const ExcelExport = () => {
     ws["M1"].s = stylesColumns;
     ws["N1"].s = stylesColumns;
 
+    ws["G5"].s = {
+      border: {
+        bottom: BORDER_DARK,
+        left: BORDER_DARK,
+        right: BORDER_DARK,
+        top: BORDER_DARK,
+      },
+      numFmt:"0.0%"
+    };
+
     const wb: WorkBook = { Sheets: { BBDD: ws }, SheetNames: ["BBDD"] };
 
     const excelBuffer = write(wb, {
@@ -104,7 +116,7 @@ const ExcelExport = () => {
     FileSaver.saveAs(data, fileName + fileExtension);
   };
 
-  return <DefaultButton text="Export Excel 2" onClick={handleClick} />;
+  return <DefaultButton text="Export Excel" onClick={handleClick} />;
 };
 
 export default ExcelExport;

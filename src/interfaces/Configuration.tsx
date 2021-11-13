@@ -19,7 +19,7 @@ export interface IData extends Iconfiguration {
   nClient: number;
   nActivity: number;
   dateStart?: string;
-  product?: IComboBoxOption|string;
+  product?: IComboBoxOption | string;
   categoryActivity?: string;
   codeActivity?: string;
   commentary?: string;
@@ -31,23 +31,26 @@ export interface IContextData {
   data: IData[];
   setData?: any;
   getLastObject: () => IData | null;
+  getCurrentClien: (nActivity:number) => IData | null;
   Clean?: any;
 }
 
 export interface IContextForm {
-  activity: IData;
   setActivity?: any;
-  handleChange: (key: string, value?: string | number) => void;
   handleSubmit: () => void;
   handleRecord: () => void;
-  handleClean: () => void;
+  handleClean: any;
   dateStart: string;
   nClient: number;
   nActivity: number;
-  product:IComboBoxOption;
+  commentary: string;
+  codeActivity: string;
+  product: IComboBoxOption;
   setDateStart: any;
   setNClient: any;
   setNActivity: any;
-  setProduct:any;
+  setProduct: any;
+  setCommentary: any;
+  setCodeActivity: any;
   isLoading: boolean;
 }

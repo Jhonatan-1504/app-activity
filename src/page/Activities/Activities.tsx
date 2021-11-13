@@ -2,24 +2,18 @@ import {
   DefaultButton,
   PrimaryButton,
   Stack,
-  TextField,
 } from "@fluentui/react";
 import { useFormContext } from "../../context/FormActivity";
+import ComboboxCode from "./ComboboxCode";
 import ComboboxProduct from "./ComboboxProduct";
 import CommadActivity from "./CommadActivity";
 import CommadClient from "./CommadClient";
 import CommadDate from "./CommadDate";
 import SuccessAlert from "./SuccessAlert";
+import TextAreaObservation from "./TextAreaObservation";
 
 const Activities = () => {
-  const {
-    activity,
-    isLoading,
-    handleChange,
-    handleRecord,
-    handleSubmit,
-    handleClean,
-  } = useFormContext();
+  const { isLoading,handleRecord,handleSubmit,handleClean} = useFormContext();
 
   return (
     <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: "90%" } }}>
@@ -28,19 +22,8 @@ const Activities = () => {
       <CommadClient />
       <CommadActivity />
       <ComboboxProduct />
-      <TextField
-        label="Codigo"
-        required
-        defaultValue={activity.codeActivity}
-        onChange={(_, val) => handleChange("codeActivity", val)}
-      />
-      <TextField
-        label="Observacion"
-        multiline
-        rows={3}
-        defaultValue={activity.commentary}
-        onChange={(_, val) => handleChange("commentary", val)}
-      />
+      <ComboboxCode />
+      <TextAreaObservation />
       <Stack horizontal horizontalAlign="space-between">
         <Stack.Item styles={{ root: { flex: 1, columnGap: "10%" } }}>
           <DefaultButton text="Graba" onClick={handleRecord} />

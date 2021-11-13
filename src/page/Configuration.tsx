@@ -28,8 +28,11 @@ const Configuration = () => {
     if (config?.nameController) {
       setConfiguration({ ...config });
     }
-    if(config?.date){
+    if (config?.date) {
       setConfiguration({ ...config });
+    }
+    if (initialState.date !== config?.date) {
+      setConfiguration({ ...config, date: initialState.date });
     }
   }, [config]);
 

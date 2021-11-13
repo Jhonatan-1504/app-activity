@@ -4,10 +4,11 @@ import { useFormContext } from "../../context/FormActivity";
 
 const CommadClient = () => {
   const { nClient, setNClient, setNActivity, setProduct } = useFormContext();
-  const { getLastObject } = useActivities();
+  const { getLastObject, getCurrentClien } = useActivities();
 
   const handleNull = () => {
     setNClient("");
+    setNActivity(1);
     setProduct({ key: "nulo", text: "No tiene" });
   };
 
@@ -19,7 +20,12 @@ const CommadClient = () => {
         setNClient(1);
         break;
       case obj:
-        setNClient(obj?.nClient ? obj.nClient * 1 + 1 : 1);
+        if (!obj?.nClient || obj?.nClient === 0) {
+          let currentObj = getCurrentClien(obj?.nActivity ? obj.nActivity : 0);
+          setNClient(currentObj?.nClient ? currentObj.nClient * 1 + 1 : 1);
+        } else {
+          setNClient(obj.nClient * 1 + 1);
+        }
         setProduct({ key: "nulo", text: "No tiene" });
         break;
     }
