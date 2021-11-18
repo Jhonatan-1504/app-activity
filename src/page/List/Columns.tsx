@@ -1,12 +1,17 @@
-import { IColumn } from "@fluentui/react";
+import { IButtonStyles, IColumn } from "@fluentui/react";
+import { IData } from "../../interfaces/Configuration";
+
+export const iconButtonStyles: Partial<IButtonStyles> = {
+  root: { float: "right", height: "inherit" },
+};
 
 export const column: IColumn[] = [
   {
     key: "column1",
     name: "Cliente",
     fieldName: "nClient",
-    minWidth: 40,
-    maxWidth: 40,
+    minWidth: 50,
+    maxWidth: 50,
     isResizable: true,
   },
   {
@@ -32,6 +37,7 @@ export const column: IColumn[] = [
     minWidth: 100,
     maxWidth: 100,
     isResizable: true,
+    onRender: (item: IData) => <div>{item.product?.text}</div>,
   },
   {
     key: "column5",

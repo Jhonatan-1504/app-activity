@@ -16,10 +16,11 @@ export interface IContextConfiguration {
 }
 
 export interface IData extends Iconfiguration {
+  id: string;
   nClient: number;
   nActivity: number;
-  dateStart?: string;
-  product?: IComboBoxOption | string;
+  dateStart: string;
+  product?: IComboBoxOption;
   categoryActivity?: string;
   codeActivity?: string;
   commentary?: string;
@@ -29,10 +30,14 @@ export interface IData extends Iconfiguration {
 
 export interface IContextData {
   data: IData[];
-  setData?: any;
+  addNewData: (item: IData) => void;
+  updateData: (item: IData) => void;
+  deleteData:(id:string)=>void;
+  cleanAllData: () => void;
   getLastObject: () => IData | null;
-  getCurrentClien: (nActivity:number) => IData | null;
-  Clean?: any;
+  getCurrentClien: (nActivity: number) => IData | null;
+  objectItem: IData;
+  setObjectItem: any;
 }
 
 export interface IContextForm {

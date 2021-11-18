@@ -1,21 +1,23 @@
 import { PrimaryButton, Stack, TextField } from "@fluentui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Iconfiguration } from "../interfaces/Configuration";
 import TextColor from "../components/TextColor";
 import { useConfig } from "../context/Configuration";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
-const initialState: Iconfiguration = {
-  date: moment().format("D/M/Y"),
-  sede: "San Isidro",
-  marketStall: "Ejecutivo de Negocios BEX DIGITAL",
-};
-
 const calendarIcons = { iconName: "Calendar" };
 
 const Configuration = () => {
   const { setConfig, config } = useConfig();
+
+  const initialState: Iconfiguration = {
+    ...config,
+    sede: "San Isidro",
+    date: moment().format("D/M/Y"),
+    marketStall: "Ejecutivo de Negocios BEX DIGITAL",
+  };
+
   const [configuration, setConfiguration] =
     useState<Iconfiguration>(initialState);
   const navegation = useHistory();
@@ -24,24 +26,15 @@ const Configuration = () => {
     setConfiguration({ ...configuration, [key]: value });
   };
 
-  useEffect(() => {
-    if (config?.nameController) {
-      setConfiguration({ ...config });
-    }
-    if (config?.date) {
-      setConfiguration({ ...config });
-    }
-    if (initialState.date !== config?.date) {
-      setConfiguration({ ...config, date: initialState.date });
-    }
-  }, [config]);
-
   const onClick = () => {
-    if (!configuration.sede) return;
-    if (!configuration.date) return;
-    if (!configuration.marketStall) return;
-    if (!configuration.nameExecutive) return;
-    if (!configuration.nameController) return;
+    if (
+      !configuration.sede ||
+      !configuration.date ||
+      !configuration.marketStall ||
+      !configuration.nameController ||
+      !configuration.nameExecutive
+    )
+      return;
     setConfig(configuration);
     navegation.push("/");
   };
@@ -54,7 +47,7 @@ const Configuration = () => {
     <Stack tokens={{ childrenGap: 10 }} styles={{ root: { width: "90%" } }}>
       <TextColor>Configuraciones</TextColor>
       <TextField
-        defaultValue={config?.sede ? config.sede : configuration.sede}
+        defaultValue={configuration.sede}
         label="Sede"
         name="sede"
         required
@@ -75,9 +68,7 @@ const Configuration = () => {
         name="marketStall"
         required
         onChange={(_, value) => onChange("marketStall", value)}
-        defaultValue={
-          config?.marketStall ? config.marketStall : configuration.marketStall
-        }
+        defaultValue={configuration.marketStall}
         onGetErrorMessage={onGetErrorMessage}
       />
       <TextField
@@ -85,7 +76,7 @@ const Configuration = () => {
         label="Nombre del Ejecutivo"
         required
         onChange={(_, value) => onChange("nameExecutive", value)}
-        defaultValue={config?.nameExecutive}
+        defaultValue={configuration.nameExecutive}
         onGetErrorMessage={onGetErrorMessage}
       />
       <TextField
@@ -93,7 +84,7 @@ const Configuration = () => {
         label="Nombre del Controlador"
         required
         onChange={(_, value) => onChange("nameController", value)}
-        defaultValue={config?.nameController}
+        defaultValue={configuration.nameController}
         onGetErrorMessage={onGetErrorMessage}
       />
       <PrimaryButton text="Siguiente" onClick={onClick} />

@@ -1,7 +1,7 @@
 import { ComboBox, IComboBox, IComboBoxOption } from "@fluentui/react";
 import { useFormContext } from "../../context/FormActivity";
 
-const INITIAL_OPTIONS: IComboBoxOption[] = [
+export const INITIAL_OPTIONS: IComboBoxOption[] = [
   { key: "nulo", text: "No tiene" },
   { key: "AS", text: "Adelanto de sueldo" },
   { key: "AD", text: "Aplicativo Digital" },

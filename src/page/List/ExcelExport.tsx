@@ -15,6 +15,7 @@ const BORDER_DARK: any = { style: "thin", color: { rgb: "000000" } };
 
 const ExcelExport = () => {
   const { data } = useActivities();
+
   const { fileName, config } = useConfig();
 
   const [formatAllData, setFormatAllData] = useState<IData[]>([]);
@@ -61,7 +62,7 @@ const ExcelExport = () => {
         Cliente: item.nClient === 0 ? "" : item.nClient,
         "N°": item.nActivity,
         "Hora de Inicio": item.dateStart,
-        Producto: item.product,
+        Producto: item.product?.text,
         Actividad: item.categoryActivity,
         "Código de Actividad": item.codeActivity,
         "Observacion / Comentario": item.commentary,
@@ -95,16 +96,6 @@ const ExcelExport = () => {
     ws["M1"].s = stylesColumns;
     ws["N1"].s = stylesColumns;
 
-    ws["G5"].s = {
-      border: {
-        bottom: BORDER_DARK,
-        left: BORDER_DARK,
-        right: BORDER_DARK,
-        top: BORDER_DARK,
-      },
-      numFmt:"0.0%"
-    };
-
     const wb: WorkBook = { Sheets: { BBDD: ws }, SheetNames: ["BBDD"] };
 
     const excelBuffer = write(wb, {
@@ -116,7 +107,7 @@ const ExcelExport = () => {
     FileSaver.saveAs(data, fileName + fileExtension);
   };
 
-  return <DefaultButton text="Export Excel" onClick={handleClick} />;
+  return <DefaultButton iconProps={{iconName:'Installation'}} text="Export Excel" onClick={handleClick} />;
 };
 
 export default ExcelExport;

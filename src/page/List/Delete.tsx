@@ -15,7 +15,7 @@ interface IDelete {
 }
 
 const Delete: FC<IDelete> = ({ hideDialog, toggleHideDialog }) => {
-  const { Clean } = useActivities();
+  const { cleanAllData } = useActivities();
 
   const dialogContentProps = {
     type: DialogType.normal,
@@ -24,24 +24,21 @@ const Delete: FC<IDelete> = ({ hideDialog, toggleHideDialog }) => {
   };
 
   const handleDelete = () => {
-    if (!Clean) return;
-    Clean();
+    cleanAllData();
     toggleHideDialog();
   };
 
   return (
-    <div>
-      <Dialog
-        hidden={hideDialog}
-        onDismiss={toggleHideDialog}
-        dialogContentProps={dialogContentProps}
-      >
-        <DialogFooter>
-          <PrimaryButton onClick={handleDelete} text="Si,Aslo" />
-          <DefaultButton onClick={toggleHideDialog} text="Cancelar" />
-        </DialogFooter>
-      </Dialog>
-    </div>
+    <Dialog
+      hidden={hideDialog}
+      onDismiss={toggleHideDialog}
+      dialogContentProps={dialogContentProps}
+    >
+      <DialogFooter>
+        <PrimaryButton onClick={handleDelete} text="Si,Aslo" />
+        <DefaultButton onClick={toggleHideDialog} text="Cancelar" />
+      </DialogFooter>
+    </Dialog>
   );
 };
 
