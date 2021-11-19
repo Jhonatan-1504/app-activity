@@ -30,7 +30,7 @@ const Edit = () => {
   const closeEditDialog = useCallback(() => {
     setObjectItem({});
     toggleHideDialog();
-  }, []);
+  }, [setObjectItem,toggleHideDialog]);
 
   const handleChange = (key: string, value?: string | IComboBoxOption) => {
     setForm({ ...form, [key]: value });
@@ -46,7 +46,7 @@ const Edit = () => {
       toggleHideDialog();
       setForm(objectItem);
     }
-  }, [objectItem]);
+  }, [objectItem,toggleHideDialog]);
 
   return (
     <Dialog

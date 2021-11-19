@@ -19,7 +19,7 @@ import { IData } from "../../interfaces/Configuration";
 import Edit from "./Edit";
 
 const List = () => {
-  const { data, setObjectItem, deleteData, objectItem } = useActivities();
+  const { data, setObjectItem, deleteData } = useActivities();
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [hideDialogExcel, { toggle: toggleHideDialogExcel }] = useBoolean(
     data.length > 0 ? true : false
