@@ -33,6 +33,7 @@ export interface IContextData {
   addNewData: (item: IData) => void;
   updateData: (item: IData) => void;
   deleteData:(id:string)=>void;
+  patchDateFinally:(id:string)=>void;
   cleanAllData: () => void;
   getLastObject: () => IData | null;
   getCurrentClien: (nActivity: number) => IData | null;

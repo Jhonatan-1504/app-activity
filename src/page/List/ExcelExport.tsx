@@ -7,12 +7,53 @@ import * as FileSaver from "file-saver";
 import { useEffect, useState } from "react";
 import { IData } from "../../interfaces/Configuration";
 
-let fileType =
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-let fileExtension = ".xlsx";
+let fileType ="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+let fileExtension =".xlsx";
 
+const CARACTERS = "ABCDEFGHIKJLMNOPQRSTUVWXYZ";
+
+// styles
+
+// utils
 const BORDER_DARK: any = { style: "thin", color: { rgb: "000000" } };
+const BORDER_ALL: any = {
+  bottom: BORDER_DARK,
+  left: BORDER_DARK,
+  right: BORDER_DARK,
+  top: BORDER_DARK,
+};
 
+const ALIGN_TOP_CENTER: any = { vertical: "top", horizontal: "center" };
+const ALIGN_NORMAL_RIGHT: any = { vertical: "center", horizontal: "right" };
+const ALIGN_NORMAL_CENTER: any = { vertical: "center", horizontal: "center" };
+
+//ceils
+const COLUMNS_STYLE: CellStyle = {
+  fill: { patternType: "solid", fgColor: { rgb: "203764" } },
+  font: { color: { rgb: "FFFFFF" } },
+  alignment: ALIGN_TOP_CENTER,
+  border: BORDER_ALL,
+};
+const FORMAT_HOURS_RIGHT_BORDER: CellStyle = {
+  numFmt: "[$-x-systime]h:mm:ss AM/PM",
+  alignment: ALIGN_NORMAL_RIGHT,
+  border: BORDER_ALL,
+};
+const FORMAT_DATE_CENTER_BORDER: CellStyle = {
+  numFmt: "d/mm/yyyy",
+  alignment: ALIGN_NORMAL_CENTER,
+  border: BORDER_ALL,
+};
+const FORMAT_NUMBER:CellStyle = {
+  alignment: ALIGN_NORMAL_RIGHT,
+  border: BORDER_ALL,
+}
+const FORMAT_DEFAULT: CellStyle = {
+  alignment: ALIGN_NORMAL_CENTER,
+  border: BORDER_ALL,
+};
+
+// my component
 const ExcelExport = () => {
   const { data } = useActivities();
 
@@ -37,21 +78,6 @@ const ExcelExport = () => {
     { wch: 25 },
   ];
 
-  const stylesColumns: CellStyle = {
-    fill: { patternType: "solid", fgColor: { rgb: "203764" } },
-    font: { color: { rgb: "FFFFFF" } },
-    alignment: {
-      vertical: "top",
-      horizontal: "center",
-    },
-    border: {
-      bottom: BORDER_DARK,
-      left: BORDER_DARK,
-      right: BORDER_DARK,
-      top: BORDER_DARK,
-    },
-  };
-
   useEffect(() => {
     let all = data.map((item) =>
       Object({
@@ -75,26 +101,39 @@ const ExcelExport = () => {
   }, [data, config]);
 
   const handleClick = () => {
-    const ws = utils.json_to_sheet(formatAllData, {});
+    const ws = utils.json_to_sheet(formatAllData);
 
     ws["!autofilter"] = { ref: "A1:N1" };
     ws["!cols"] = columns;
-    ws["!rows"] = [{ hpt: 29 }];
+    ws["!rows"] = [{ hpt: 30 }];
 
-    ws["A1"].s = stylesColumns;
-    ws["B1"].s = stylesColumns;
-    ws["C1"].s = stylesColumns;
-    ws["D1"].s = stylesColumns;
-    ws["E1"].s = stylesColumns;
-    ws["F1"].s = stylesColumns;
-    ws["G1"].s = stylesColumns;
-    ws["H1"].s = stylesColumns;
-    ws["I1"].s = stylesColumns;
-    ws["J1"].s = stylesColumns;
-    ws["K1"].s = stylesColumns;
-    ws["L1"].s = stylesColumns;
-    ws["M1"].s = stylesColumns;
-    ws["N1"].s = stylesColumns;
+    for (let i = 0; i < columns.length; i++) {
+      ws[CARACTERS[i] + "1"].s = COLUMNS_STYLE;
+    }
+
+    //total array
+    for (let c = 0; c < formatAllData.length; c++) {
+      // row array
+      for (let r = 0; r < columns.length; r++) {
+        switch (CARACTERS[r]) {
+          case "B":
+            ws[CARACTERS[r] + (c + 2)].s = FORMAT_DATE_CENTER_BORDER;
+            break;
+          case "G":
+          case "L":
+          case "M":
+            ws[CARACTERS[r] + (c + 2)].s = FORMAT_HOURS_RIGHT_BORDER;
+            break;
+          case "E":
+          case "F":
+            ws[CARACTERS[r] + (c + 2)].s = FORMAT_NUMBER;
+            break;
+          default:
+            ws[CARACTERS[r] + (c + 2)].s = FORMAT_DEFAULT;
+            break;
+        }
+      }
+    }
 
     const wb: WorkBook = { Sheets: { BBDD: ws }, SheetNames: ["BBDD"] };
 
@@ -107,7 +146,13 @@ const ExcelExport = () => {
     FileSaver.saveAs(data, fileName + fileExtension);
   };
 
-  return <DefaultButton iconProps={{iconName:'Installation'}} text="Export Excel" onClick={handleClick} />;
+  return (
+    <DefaultButton
+      iconProps={{ iconName: "Installation" }}
+      text="Export Excel"
+      onClick={handleClick}
+    />
+  );
 };
 
 export default ExcelExport;

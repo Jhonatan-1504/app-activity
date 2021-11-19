@@ -9,7 +9,12 @@ import {
 import { appActivity } from "../action/AppActivity";
 import { IContextData, IData } from "../interfaces/Configuration";
 
-export const INIT_OBJECT_ITEM = { nClient: 0, nActivity: 0, id: "", dateStart: "" };
+export const INIT_OBJECT_ITEM = {
+  nClient: 0,
+  nActivity: 0,
+  id: "",
+  dateStart: "",
+};
 
 const contextActivities = createContext<IContextData>({
   data: [],
@@ -19,8 +24,9 @@ const contextActivities = createContext<IContextData>({
   getLastObject: () => null,
   getCurrentClien: () => null,
   addNewData: (s) => null,
-  updateData:(s)=>null,
+  updateData: (s) => null,
   deleteData: (id) => null,
+  patchDateFinally:(id)=>null
 });
 
 export const saveName = () => {
@@ -60,6 +66,10 @@ export const ActivitiesProvider: FC = ({ children }) => {
     dispatch({ type: "DELETE_TASK", id });
   };
 
+  const patchDateFinally = (id: string) => {
+    dispatch({ type: "PATCH_DATEEND", id });
+  };
+
   const cleanAllData = () => {
     dispatch({ type: "CLEAN_TASK", payload: "" });
   };
@@ -85,6 +95,7 @@ export const ActivitiesProvider: FC = ({ children }) => {
         ...state,
         addNewData,
         updateData,
+        patchDateFinally,
         cleanAllData,
         getLastObject,
         getCurrentClien,

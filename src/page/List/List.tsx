@@ -19,7 +19,7 @@ import { IData } from "../../interfaces/Configuration";
 import Edit from "./Edit";
 
 const List = () => {
-  const { data, setObjectItem, deleteData } = useActivities();
+  const { data, setObjectItem, deleteData, patchDateFinally } = useActivities();
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [hideDialogExcel, { toggle: toggleHideDialogExcel }] = useBoolean(
     data.length > 0 ? true : false
@@ -48,12 +48,20 @@ const List = () => {
                 {
                   key: "delete",
                   text: "Delete",
+                  iconProps:{iconName:'Delete'},
                   onClick: () => deleteData(item.id),
                 },
                 {
                   key: "edit",
                   text: "Edit",
+                  iconProps:{iconName:'Edit'},
                   onClick: () => setObjectItem(item, index),
+                },
+                {
+                  key: "setDateEnd",
+                  text: "Actualiza la hora final",
+                  iconProps:{iconName:'Refresh'},
+                  onClick: () => patchDateFinally(item.id),
                 },
               ],
             }}
@@ -70,7 +78,7 @@ const List = () => {
         styles={{ root: { width: "100%" } }}
         horizontalAlign="space-between"
       >
-        <DefaultButton onClick={toggleHideDialog} text="Limpiar Lista" />
+        <DefaultButton iconProps={{iconName:'Filter'}} onClick={toggleHideDialog} text="Limpiar Lista" />
         <ExcelExport />
       </Stack>
       <DetailsList
