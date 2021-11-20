@@ -37,7 +37,9 @@ export const FormProvider: FC = ({ children }) => {
   const temp = getStorageTemp();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [nClient, setNClient] = useState(temp.nClient ? temp.nClient : 1);
+  const [nClient, setNClient] = useState(
+    temp ? (temp.nClient ? temp.nClient : 0) : 1
+  );
   const [nActivity, setNActivity] = useState(
     temp.nActivity ? temp.nActivity : 1
   );

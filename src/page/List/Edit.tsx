@@ -1,5 +1,6 @@
 import {
   ComboBox,
+  DefaultButton,
   Dialog,
   DialogFooter,
   DialogType,
@@ -30,7 +31,7 @@ const Edit = () => {
   const closeEditDialog = useCallback(() => {
     setObjectItem({});
     toggleHideDialog();
-  }, [setObjectItem,toggleHideDialog]);
+  }, [setObjectItem, toggleHideDialog]);
 
   const handleChange = (key: string, value?: string | IComboBoxOption) => {
     setForm({ ...form, [key]: value });
@@ -46,7 +47,7 @@ const Edit = () => {
       toggleHideDialog();
       setForm(objectItem);
     }
-  }, [objectItem,toggleHideDialog]);
+  }, [objectItem, toggleHideDialog]);
 
   return (
     <Dialog
@@ -55,6 +56,10 @@ const Edit = () => {
       onDismiss={closeEditDialog}
       closeButtonAriaLabel="Close"
     >
+      <DefaultButton
+        text="nulo client"
+        onClick={() => handleChange("nClient", "")}
+      />
       <Stack horizontal tokens={{ childrenGap: 10 }}>
         <SpinButton
           label="Cliente"

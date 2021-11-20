@@ -62,7 +62,7 @@ const List = () => {
                   text: "Actualiza la hora final",
                   iconProps:{iconName:'Refresh'},
                   onClick: () => patchDateFinally(item.id),
-                },
+                }
               ],
             }}
           />
