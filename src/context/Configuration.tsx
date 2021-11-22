@@ -14,8 +14,7 @@ export const ConfigProvider: FC = ({ children }) => {
 
   let configAll = localStorage.getItem("config");
 
-  const getConfiguration: Iconfiguration =
-    configAll && configAll !== null ? JSON.parse(configAll) : {};
+  const getConfiguration: Iconfiguration =configAll && configAll !== null ? JSON.parse(configAll) : {};
 
   const [config, setConfig] = useState<Iconfiguration>(getConfiguration);
 

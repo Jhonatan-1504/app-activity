@@ -7,8 +7,9 @@ import * as FileSaver from "file-saver";
 import { useEffect, useState } from "react";
 import { IData } from "../../interfaces/Configuration";
 
-let fileType ="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-let fileExtension =".xlsx";
+let fileType =
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+let fileExtension = ".xlsx";
 
 const CARACTERS = "ABCDEFGHIKJLMNOPQRSTUVWXYZ";
 
@@ -44,10 +45,10 @@ const FORMAT_DATE_CENTER_BORDER: CellStyle = {
   alignment: ALIGN_NORMAL_CENTER,
   border: BORDER_ALL,
 };
-const FORMAT_NUMBER:CellStyle = {
+const FORMAT_NUMBER: CellStyle = {
   alignment: ALIGN_NORMAL_RIGHT,
   border: BORDER_ALL,
-}
+};
 const FORMAT_DEFAULT: CellStyle = {
   alignment: ALIGN_NORMAL_CENTER,
   border: BORDER_ALL,
@@ -88,7 +89,7 @@ const ExcelExport = () => {
         Cliente: item.nClient === 0 ? "" : item.nClient,
         "N°": item.nActivity,
         "Hora de Inicio": item.dateStart,
-        Producto: item.product?.text,
+        Producto: item.product?.text === "No tiene" ? "" : item.product?.text,
         Actividad: item.categoryActivity,
         "Código de Actividad": item.codeActivity,
         "Observacion / Comentario": item.commentary,
@@ -142,6 +143,7 @@ const ExcelExport = () => {
       type: "array",
       bookSST: false,
     });
+
     const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
   };
