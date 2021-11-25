@@ -1,21 +1,21 @@
 import { IComboBoxOption } from "@fluentui/react";
 
 export interface Iconfiguration {
-  sede?: string;
-  date?: string;
-  marketStall?: string;
+  sede?: IComboBoxOption;
+  date: Date|string;
+  marketStall?: IComboBoxOption;
   nameExecutive?: string;
   nameController?: string;
 }
 
 export interface IContextConfiguration {
-  config?: Iconfiguration;
+  config: Iconfiguration;
   setConfig?: any;
   setClean?: any;
   fileName?: any;
 }
 
-export interface IData extends Iconfiguration {
+export interface IData {
   id: string;
   nClient: number;
   nActivity: number;
@@ -32,8 +32,8 @@ export interface IContextData {
   data: IData[];
   addNewData: (item: IData) => void;
   updateData: (item: IData) => void;
-  deleteData:(id:string)=>void;
-  patchDateFinally:(id:string)=>void;
+  deleteData: (id: string) => void;
+  patchDateFinally: (id: string) => void;
   cleanAllData: () => void;
   getLastObject: () => IData | null;
   getCurrentClien: (nActivity: number) => IData | null;
@@ -41,7 +41,7 @@ export interface IContextData {
   setObjectItem: any;
 }
 
-export interface IContextForm {
+export interface IContextFormActivity {
   setActivity?: any;
   handleSubmit: () => void;
   handleRecord: () => void;
@@ -59,4 +59,23 @@ export interface IContextForm {
   setCommentary: any;
   setCodeActivity: any;
   isLoading: boolean;
+}
+
+export interface IContextFormConfiguration {
+  error?:string;
+  setError:any;
+  ObjectGenerate:()=>Iconfiguration;
+  Verificate:()=>string;
+  //items
+  sede: IComboBoxOption;
+  date: Date;
+  marketStall: IComboBoxOption;
+  nameExecutive: string;
+  nameController: string;
+  //set
+  setSede: any;
+  setDate: any;
+  setMarketStall: any;
+  setNameExecutive: any;
+  setNameController: any;
 }

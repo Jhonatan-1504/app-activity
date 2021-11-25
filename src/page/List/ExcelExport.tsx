@@ -1,11 +1,12 @@
 import { DefaultButton } from "@fluentui/react";
 import { useActivities } from "../../context/Activities";
-import { useConfig } from "../../context/Configuration";
 
 import { utils, WorkBook, write, ColInfo, CellStyle } from "xlsx-js-style";
 import * as FileSaver from "file-saver";
 import { useEffect, useState } from "react";
 import { IData } from "../../interfaces/Configuration";
+import { useConfiguration } from "../../context/FormConfig";
+import { onFormatDate } from "../Configuration/PickerDate";
 
 let fileType =
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -56,9 +57,12 @@ const FORMAT_DEFAULT: CellStyle = {
 
 // my component
 const ExcelExport = () => {
-  const { data } = useActivities();
+  const { data} = useActivities();
 
-  const { fileName, config } = useConfig();
+  const { sede, date, marketStall, nameController, nameExecutive } = useConfiguration();
+
+  const FILE_NAME = `REPORTE ${sede.text} ${date.getDate()}.${date.getMonth() + 1} - ${nameController.toUpperCase()}`;
+  const FORMAT_DATE = onFormatDate(date);
 
   const [formatAllData, setFormatAllData] = useState<IData[]>([]);
 
@@ -82,10 +86,10 @@ const ExcelExport = () => {
   useEffect(() => {
     let all = data.map((item) =>
       Object({
-        Sede: config?.sede,
-        Fecha: config?.date,
-        Puesto: config?.marketStall,
-        "Nombre del ejecutivo": config?.nameExecutive,
+        Sede: sede.text,
+        Fecha: FORMAT_DATE,
+        Puesto: marketStall.text,
+        "Nombre del ejecutivo": nameExecutive,
         Cliente: item.nClient === 0 ? "" : item.nClient,
         "N°": item.nActivity,
         "Hora de Inicio": item.dateStart,
@@ -95,11 +99,11 @@ const ExcelExport = () => {
         "Observacion / Comentario": item.commentary,
         "Hora Final": item.dateEnd,
         Duracion: item.duration,
-        Controlador: config?.nameController,
+        Controlador: nameController,
       })
     );
     setFormatAllData(all);
-  }, [data, config]);
+  }, [data, FORMAT_DATE, marketStall, nameController, nameExecutive, sede]);
 
   const handleClick = () => {
     const ws = utils.json_to_sheet(formatAllData);
@@ -145,7 +149,7 @@ const ExcelExport = () => {
     });
 
     const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, fileName + fileExtension);
+    FileSaver.saveAs(data, FILE_NAME + fileExtension);
   };
 
   return (

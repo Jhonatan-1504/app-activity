@@ -1,16 +1,16 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { ActivitiesProvider } from "../context/Activities";
-import { ConfigProvider } from "../context/Configuration";
 
-import ActivitiesPage from "../page/Activities/ActivitiesPage";
-import ConfigurationComponent from "../page/Configuration";
 import List from "../page/List/List";
+import ActivitiesPage from "../page/Activities/ActivitiesPage";
+import ConfigPage from "../page/Configuration/ConfigPage";
 import Layout from "../page/Layout";
 import { FormProvider } from "../context/FormActivity";
+import { ConfigurationProvider } from "../context/FormConfig";
 
 const ActivitiesRouter = () => {
   return (
-    <ConfigProvider>
+    <ConfigurationProvider>
       <ActivitiesProvider>
         <BrowserRouter>
           <Switch>
@@ -18,13 +18,13 @@ const ActivitiesRouter = () => {
               <FormProvider>
                 <Route path="/" exact component={ActivitiesPage} />
               </FormProvider>
-              <Route path="/config" exact component={ConfigurationComponent} />
+              <Route path="/config" exact component={ConfigPage} />
               <Route path="/list" component={List} />
             </Layout>
           </Switch>
         </BrowserRouter>
       </ActivitiesProvider>
-    </ConfigProvider>
+    </ConfigurationProvider>
   );
 };
 

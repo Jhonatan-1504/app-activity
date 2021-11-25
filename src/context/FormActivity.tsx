@@ -1,11 +1,11 @@
 import { IComboBoxOption } from "@fluentui/react";
 import moment from "moment";
 import { createContext, FC, useContext, useState } from "react";
-import { IContextForm, IData } from "../interfaces/Configuration";
+import { IContextFormActivity, IData } from "../interfaces/Configuration";
 import { useActivities } from "./Activities";
 import { v4 as generateV4 } from "uuid";
 
-export const FormContext = createContext<IContextForm>({
+export const FormContext = createContext<IContextFormActivity>({
   handleSubmit: () => {},
   handleRecord: () => {},
   handleClean: () => {},
